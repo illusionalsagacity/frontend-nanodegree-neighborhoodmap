@@ -1,6 +1,7 @@
 ## Getting Started
 
 1. **Clone the repo from GitHub**
+
 		`git clone https://github.com/illusionalsagacity/frontend-nanodegree-neighborhoodmap
 		cd frontend-nanodegree-neighborhoodmap`
 
