@@ -8,6 +8,7 @@
   },
   "author": "Robert Meyer",
   "license": "MIT",
+  "repository": "https://github.com/illusionalsagacity/frontend-nanodegree-neighborhoodmap",
   "devDependencies": {
     "event-stream": "^3.3.1",
     "gulp": "^3.8.11",
