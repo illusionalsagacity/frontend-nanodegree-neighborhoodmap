@@ -1,0 +1,23 @@
+{
+  "name": "neighborhood-map",
+  "version": "1.0.0",
+  "authors": [
+    "Robert Meyer <illusionalsagacity@gmail.com>"
+  ],
+  "description": "A neighborhood map project using several location-based APIs",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "neighborhood-map.sublime-project"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.4",
+    "jquery": "~2.1.4",
+    "knockout": "~3.3.0"
+  }
+}

@@ -1,0 +1,13 @@
+/* file: style.css */
+
+body {
+	padding: 70px 0 50px;
+}
+
+.form-inline {
+	margin-bottom: 20px;
+}
+
+.input-group {
+	margin-bottom: 20px;
+}

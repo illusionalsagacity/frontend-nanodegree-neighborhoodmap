@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Neighborhood Map</title>
+
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbTwwP1IjRKbE-qpOrydqZnwuWF_BplQY"></script>
+
+        <link rel="stylesheet" href="vendor/css/bootstrap.css" data-min="bootstrap.min.css">
+        <link rel="stylesheet" href="vendor/css/bootstrap-theme.css" data-min="bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/style.css" data-min="style.min.css">
+
+        <script type="text/html" id="location-list-template">
+            <li class="list-group-item">
+                <h3 data-bind="text: name"></h3>
+                <span data-bind="text: description"></span>
+            </li>
+        </script>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-inverse navbar-fixed-top">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#" data-bind="text: appName"></a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li><a href="#" data-toggle="modal" data-target="#aboutModal">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="aboutModelLabel">About the Neighborhood Map Project</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>This neighborhood map project was created as a part of the Udacity Front End Nanodegree program.</p>
+                        <p>Created with the Bootstrap framework, jQuery, and Knockout javascript libraries.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+            <h1 class="page-header">San Francisco - Fisherman's Wharf</h1>
+                <div class="col-md-8">
+                    <div id="map-canvas" class="embed-responsive embed-responsive-4by3"></div>
+                </div>
+                <div class="col-md-4 content">
+
+                <form data-bind="submit: searchFor">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="search" placeholder="Search for a location..." data-bind="textInput: searchTerm" required>
+                        <span class="input-group-btn"><button type="submit" class="btn btn-primary">Search</button></span>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h3 class="panel-title">Interesting Places:</h3></div>
+                        <div class="panel-body">
+                        </div>
+                        <ul class="list-group" data-bind="template: { name: 'location-list-template', foreach: locations }">
+                        </ul>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+
+        <script src="vendor/js/jquery.js" data-min="jquery.min.js"></script>
+        <script src="vendor/js/bootstrap.js" data-min="bootstrap.min.js"></script>
+        <script src="vendor/js/knockout.debug.js" data-min="knockout.js"></script>
+        <script src="js/main.js" data-min="main.min.js"></script>
+    </body>
+</html>
