@@ -23,7 +23,7 @@
 			var text = $('#search', formElement).val();
 			console.log(text);
 			alert(text);
-		}
+		};
 	}
 
 	function initialize() {

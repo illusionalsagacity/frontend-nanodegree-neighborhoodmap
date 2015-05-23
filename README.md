@@ -1,3 +1,5 @@
+## About
+
 ## Getting Started
 
 1. **Clone the repo from GitHub**
@@ -5,12 +7,15 @@
 		git clone https://github.com/illusionalsagacity/frontend-nanodegree-neighborhoodmap
 		cd frontend-nanodegree-neighborhoodmap
 
-2. **Using the application** View the dist/index.html file in your browser, or use an http server in the dist directory and browse to localhost. (e.g. `python -m http.server`)
+2. **Using the application** You can view the dist/index.html file in your browser, or use an http server in the dist directory and browse to localhost. For python 3:
+
+		cd dist
+		python -m http.server
 
 ## Building the Neighborhood Map project
 If you prefer to build the project from souce yourself:
 
-1. **Install build dependencies** Make sure you have [Node.js](http://nodejs.org/) and [Bower](http://bower.io/) installed. These are only used to install dependencies, you don't need them to run the application.
+1. **Install build dependencies** Make sure you have [Node.js](http://nodejs.org/), [npm](https://www.npmjs.com/), and [Bower](http://bower.io/) installed. These are only used to install dependencies, you don't need them to run the application itself.
 
 		npm install
 		bower install
@@ -21,4 +26,4 @@ If you prefer to build the project from souce yourself:
 
 4. **Build from source** To build the project:
 
-	gulp deploy
+		gulp deploy

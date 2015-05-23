@@ -22,7 +22,14 @@ This project is licensed under the terms of the MIT License.
 > OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 > THE SOFTWARE.
 
-This project uses code from the following projects, which have their own licenses:
+This project uses these external libraries and frameworks, which have their own licenses:
+
 - [jQuery](https://github.com/jquery/jquery/blob/master/LICENSE.txt)
 - [Bootstrap](https://github.com/twbs/bootstrap/blob/master/LICENSE)
 - [Knockout.js](https://github.com/knockout/knockout/blob/master/LICENSE)
+
+This project uses the following external tools for building:
+
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/)
+- [Bower](http://bower.io/)
