@@ -9,16 +9,18 @@
 
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbTwwP1IjRKbE-qpOrydqZnwuWF_BplQY"></script>
 
-        <link rel="stylesheet" href="vendor/css/bootstrap.min.css">
-        <link rel="stylesheet" href="vendor/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/style.min.css">
+        <link rel="stylesheet" href="vendor\css\bootstrap.min.css">
+        <link rel="stylesheet" href="vendor\css\bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css\style.min.css">
 
+        <!-- a knockout template for the list -->
         <script type="text/html" id="location-list-template">
             <li class="list-group-item">
                 <h3 data-bind="text: name"></h3>
                 <span data-bind="text: description"></span>
             </li>
         </script>
+
     </head>
 
     <body>
@@ -51,6 +53,7 @@
                     <div class="modal-body">
                         <p>This neighborhood map project was created as a part of the Udacity Front End Nanodegree program.</p>
                         <p>Created with the Bootstrap framework, jQuery, and Knockout javascript libraries.</p>
+                        <p>Copyright 2015 Robert Meyer, under the MIT License</p>
                     </div>
                 </div>
             </div>
@@ -59,32 +62,42 @@
         <div class="container">
             <div class="row">
             <h1 class="page-header">San Francisco - Fisherman&apos;s Wharf</h1>
-                <div class="col-md-8">
-                    <div id="map-canvas" class="embed-responsive embed-responsive-4by3"></div>
-                </div>
-                <div class="col-md-4 content">
-
                 <form data-bind="submit: searchFor">
                     <div class="input-group">
                         <input type="text" class="form-control" id="search" placeholder="Search for a location..." data-bind="textInput: searchTerm" required>
                         <span class="input-group-btn"><button type="submit" class="btn btn-primary">Search</button></span>
                     </div>
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><h3 class="panel-title">Interesting Places:</h3></div>
-                        <div class="panel-body">
-                        </div>
-                        <ul class="list-group" data-bind="template: { name: &apos;location-list-template&apos;, foreach: locations }">
-                        </ul>
-                    </div>
                 </form>
+
+                <div role="tabpanel">
+                    <ul class="nav nav-pills" role="tablist">
+                        <li role="presentation" class="active"><a href="#map" aria-controls="map" role="tab" data-toggle="tab">Map View</a></li>
+                        <li role="presentation"><a href="#list" aria-controls="list" role="tab" data-toggle="tab">List View</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane active" id="map">
+                            <div id="map-canvas" class="embed-responsive embed-responsive-4by3"></div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane" id="list">
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><h3 class="panel-title">Interesting Places:</h3></div>
+                                <div class="panel-body">
+                                </div>
+                                <ul class="list-group" data-bind="template: { name: &apos;location-list-template&apos;, foreach: locations }">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
 
-        <script src="vendor/js/jquery.min.js"></script>
-        <script src="vendor/js/bootstrap.min.js"></script>
-        <script src="vendor/js/knockout.js"></script>
-        <script src="js/main.min.js"></script>
+        <script src="vendor\js\jquery.min.js"></script>
+        <script src="vendor\js\bootstrap.min.js"></script>
+        <script src="vendor\js\knockout.js"></script>
+        <script src="js\main.min.js"></script>
     </body>
 </html>

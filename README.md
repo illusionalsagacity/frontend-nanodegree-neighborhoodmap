@@ -27,3 +27,5 @@ If you prefer to build the project from souce yourself:
 4. **Build from source** To build the project:
 
 		gulp deploy
+
+5. **Customizing** To make changes to this project, edit or add files under the src directory. When you are done, rebuild the project.

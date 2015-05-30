@@ -30,7 +30,10 @@
 		var latLng = new google.maps.LatLng(37.8083, -122.4156);
 		var mapOptions = {
 			center: latLng,
-			zoom: 17
+			draggable: false,
+			scrollwheel: false,
+			zoom: 17,
+			zoomControl: false,
 		};
 		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	}
