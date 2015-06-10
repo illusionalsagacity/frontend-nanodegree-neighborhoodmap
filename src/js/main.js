@@ -3,6 +3,84 @@
 (function($) {
 	'use strict';
 
+	// TODO: use jquery to append a new carousel item.
+	var numPictures = 0;
+
+	var carousel = {
+		indicatorHTML: [],
+		itemHTML: [],
+		captionHTML: []
+	};
+
+	function createCarouselItem(src) {
+		var indicatorHTML = '<li data-target="#flickr-content" data-slide-to=' + numPictures;
+		var itemHTML = '<div class="item'
+		if (numPictures === 0) {
+			indicatorHTML += ' class="active"></li>';
+			itemHTML += ' active"><img class="img-responsive" src="' + src + '"></div>';
+		} else {
+			indicatorHTML += '></li>';
+			itemHTML += '"><img src="' + src + '"></div>';
+		}
+		carousel.indicatorHTML.push(indicatorHTML);
+		carousel.itemHTML.push(itemHTML);
+		numPictures++;
+	}
+
+	function insertCarouselItems() {
+		carousel.indicatorHTML.forEach(function(element, index, array) {
+			$('.carousel-indicators').append(element);
+		});
+		carousel.itemHTML.forEach(function(element, index, array) {
+			$('.carousel-inner').append(element);
+		});
+	}
+
+	function getFlickrPhotoInfo(pid) {
+		var query = 'https://api.flickr.com/services/rest/';
+		$.ajax({
+			data: {
+				method: 'flickr.photos.getInfo',
+				api_key: '6b24b2e754fe7ea499e2db41d1daa866',
+				format: 'json',
+				photo_id: pid
+			},
+			dataType: 'jsonp',
+			jsonp: 'jsoncallback',
+			url: query,
+			success: function(response) {
+				console.log(response);
+			}
+		});
+	}
+
+
+	function searchFlickr() {
+		var query = 'https://api.flickr.com/services/rest/';
+		$.ajax({
+			data: {
+				method: 'flickr.photos.search',
+				api_key: '6b24b2e754fe7ea499e2db41d1daa866',
+				safe_search: 1,
+				content_type: 1,
+				woe_id: 28288708,
+				format: 'json',
+				per_page: 20
+			},
+			dataType: 'jsonp',
+			jsonp: 'jsoncallback',
+			url: query,
+			success: function(response) {
+				$.each(response.photos.photo, function(i, photo) {
+					var base_url = 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_b.jpg';
+					createCarouselItem(base_url);
+					getFlickrPhotoInfo(photo.id);
+				});
+				insertCarouselItems();
+			}
+		});
+	}
+
 	function ViewModel() {
 		this.appName = 'Neighborhood Map';
 		this.latitude = 37.8083; // north
@@ -12,13 +90,13 @@
 			{
 				name: 'Harry\'s Diner',
 				description: 'A small diner!',
-			},
-			{
-				name: 'McDonald\'s',
-				description: 'A fast food resturant chain.',
+				address: '',
+				lat: 37.8083,
+				lng: -122.4157,
 			},
 		]);
 
+		// TODO: finish.
 		this.searchFor = function(formElement) {
 			var text = $('#search', formElement).val();
 			console.log(text);
@@ -31,7 +109,10 @@
 		var mapOptions = {
 			center: latLng,
 			draggable: false,
+			disableDefaultUI: true,
+			disableDoubleClickZoom: true,
 			scrollwheel: false,
+			panControl: false,
 			zoom: 17,
 			zoomControl: false,
 		};
@@ -40,4 +121,7 @@
 	google.maps.event.addDomListener(window, 'load', initialize);
 
 	ko.applyBindings(new ViewModel());
+
+	searchFlickr();
+	console.log(carousel);
 })(jQuery);

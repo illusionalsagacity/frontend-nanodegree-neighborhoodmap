@@ -18,7 +18,7 @@ var
 
 var vendorFiles = {
     bootstrap: {
-        src: 'bower_components/bootstrap/dist/**/*.{css,js,map}',
+        src: 'bower_components/bootstrap/dist/**/*.{css,js,map,eot,svg,ttf,woff,woff2}',
         dest: 'dist/vendor'
     },
     jquery: {
@@ -83,7 +83,7 @@ gulp.task('dev:lint', function() {
 });
 
 gulp.task('dev:watch', function() {
-    gulp.watch('src/js/*.js', ['dev:lint', 'deploy:js']);
+    gulp.watch('src/js/*.js', ['deploy:js']);
     gulp.watch('src/css/*.css', ['deploy:css']);
     gulp.watch('src/*.html', ['deploy:html']);
 });

@@ -5,7 +5,11 @@ body {
 }
 
 .form-inline {
-	margin-bottom: 20px;
+	margin: 0 0 20px;
+}
+
+.tab-content {
+	padding: 20px 0 0;
 }
 
 .input-group {
@@ -17,3 +21,4 @@ input[type='number'],
 textarea {
   font-size: 16px;
 }
+
