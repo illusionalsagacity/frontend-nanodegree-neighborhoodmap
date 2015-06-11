@@ -49,11 +49,21 @@
 			jsonp: 'jsoncallback',
 			url: query,
 			success: function(response) {
-				console.log(response);
+				var captionHTML = '<div class="carousel-caption">';
+				if (response.photo.owner.realname !== '') {
+					captionHTML += '<p>' + response.photo.owner.realname + '</p>';
+				}
+				if (response.photo.owner.username !== '') {
+					captionHTML += '<p>' + response.photo.owner.username + '</p>';
+				}
+				if (response.photo.description._content !== '') {
+					captionHTML += '<p>' + response.photo.description._content + '</p>';
+				}
+				captionHTML += '</div>';
+				carousel.captionHTML.push(captionHTML);
 			}
 		});
 	}
-
 
 	function searchFlickr() {
 		var query = 'https://api.flickr.com/services/rest/';
