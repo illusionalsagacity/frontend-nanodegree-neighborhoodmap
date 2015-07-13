@@ -13,6 +13,22 @@
         <link rel="stylesheet" href="vendor/css/bootstrap-theme.css" data-min="bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/style.css" data-min="style.min.css">
 
+
+        <!-- template: carousel-indicator -->
+        <script type="text/html" id="carousel-indicator-template">
+            <li data-target="#flickr-content" data-bind="attr: { 'data-slide-to': $index }"></li>
+        </script>
+
+        <!-- template: carousel-item -->
+        <script type="text/html" id="carousel-item-template">
+            <div class="item">
+                <img data-bind="attr: { src: url }">
+                <div class="carousel-caption">
+                    <p data-bind="text: description"></p>
+                </div>
+            </div>
+        </script>
+
         <!-- a knockout template for the list -->
         <script type="text/html" id="location-list-template">
             <li class="list-group-item">
@@ -84,17 +100,16 @@
                         <div role="tabpanel" class="tab-pane" id="list">
                             <div class="panel panel-default">
                                 <div class="panel-heading"><h3 class="panel-title">Interesting Places:</h3></div>
-                                <div class="panel-body">
-                                </div>
+                                <div class="panel-body"></div>
                                 <ul class="list-group" data-bind="template: { name: 'location-list-template', foreach: locations }">
                                 </ul>
                             </div>
                         </div>
 
                         <div role="tabpanel" class="tab-pane" id="flickr">
-                            <div id="flickr-content" class="carousel slide" data-ride="carousel">
-                                <ol class="carousel-indicators"></ol>
-                                <div class="carousel-inner" role="listbox"></div>
+                            <div id="flickr-content" class="carousel" data-ride="carousel">
+                                <ol class="carousel-indicators" data-bind="template: { name: 'carousel-indicator-template', foreach: photos }"></ol>
+                                <div class="carousel-inner" role="listbox" data-bind="template: { name: 'carousel-item-template', foreach: photos }"></div>
                                 <a class="left carousel-control" href="#flickr-content" role="button" data-slide="prev">
                                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                                     <span class="sr-only">Previous</span>

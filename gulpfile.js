@@ -16,20 +16,21 @@ var
     renameOpts = {suffix: '.min'},
     minFiles = {};
 
-var vendorFiles = {
-    bootstrap: {
-        src: 'bower_components/bootstrap/dist/**/*.{css,js,map,eot,svg,ttf,woff,woff2}',
-        dest: 'dist/vendor'
-    },
-    jquery: {
-        src: 'bower_components/jquery/dist/*.{js,map}',
-        dest: 'dist/vendor/js'
-    },
-    knockout: {
-        src: 'bower_components/knockout/dist/*.js',
-        dest: 'dist/vendor/js'
-    },
-};
+var
+    vendorFiles = {
+        bootstrap: {
+            src: 'bower_components/bootstrap/dist/**/*.{css,js,map,eot,svg,ttf,woff,woff2}',
+            dest: 'dist/vendor'
+        },
+        jquery: {
+            src: 'bower_components/jquery/dist/*.{js,map}',
+            dest: 'dist/vendor/js'
+        },
+        knockout: {
+            src: 'bower_components/knockout/dist/*.js',
+            dest: 'dist/vendor/js'
+        },
+    };
 
 gulp.task('vendor:bootstrap', function() {
     return gulp.src(vendorFiles.bootstrap.src)

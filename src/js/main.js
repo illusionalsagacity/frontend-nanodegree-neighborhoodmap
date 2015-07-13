@@ -3,40 +3,8 @@
 (function($) {
 	'use strict';
 
-	// TODO: use jquery to append a new carousel item.
-	var numPictures = 0;
 
-	var carousel = {
-		indicatorHTML: [],
-		itemHTML: [],
-		captionHTML: []
-	};
-
-	function createCarouselItem(src) {
-		var indicatorHTML = '<li data-target="#flickr-content" data-slide-to=' + numPictures;
-		var itemHTML = '<div class="item'
-		if (numPictures === 0) {
-			indicatorHTML += ' class="active"></li>';
-			itemHTML += ' active"><img class="img-responsive" src="' + src + '"></div>';
-		} else {
-			indicatorHTML += '></li>';
-			itemHTML += '"><img src="' + src + '"></div>';
-		}
-		carousel.indicatorHTML.push(indicatorHTML);
-		carousel.itemHTML.push(itemHTML);
-		numPictures++;
-	}
-
-	function insertCarouselItems() {
-		carousel.indicatorHTML.forEach(function(element, index, array) {
-			$('.carousel-indicators').append(element);
-		});
-		carousel.itemHTML.forEach(function(element, index, array) {
-			$('.carousel-inner').append(element);
-		});
-	}
-
-	function getFlickrPhotoInfo(pid) {
+	function getFlickrPhotoInfo(pid, photo) {
 		var query = 'https://api.flickr.com/services/rest/';
 		$.ajax({
 			data: {
@@ -49,24 +17,33 @@
 			jsonp: 'jsoncallback',
 			url: query,
 			success: function(response) {
-				var captionHTML = '<div class="carousel-caption">';
-				if (response.photo.owner.realname !== '') {
-					captionHTML += '<p>' + response.photo.owner.realname + '</p>';
-				}
-				if (response.photo.owner.username !== '') {
-					captionHTML += '<p>' + response.photo.owner.username + '</p>';
-				}
-				if (response.photo.description._content !== '') {
-					captionHTML += '<p>' + response.photo.description._content + '</p>';
-				}
-				captionHTML += '</div>';
-				carousel.captionHTML.push(captionHTML);
+				setPhotoInfo(response, photo);
 			}
 		});
 	}
 
+	function setPhotoInfo(response, photo) {
+		photo.realname(response.photo.owner.realname);
+		photo.username(response.photo.owner.username);
+		photo.description(response.photo.description._content);
+		viewModel.photos.push(photo);
+		/*
+		var captionHTML = '<div class="carousel-caption">';
+		if (response.photo.owner.realname !== '') {
+			captionHTML += '<p>' + response.photo.owner.realname + '</p>';
+		}
+		if (response.photo.owner.username !== '') {
+			captionHTML += '<p>' + response.photo.owner.username + '</p>';
+		}
+		if (response.photo.description._content !== '') {
+			captionHTML += '<p>' + response.photo.description._content + '</p>';
+		}
+		captionHTML += '</div>';
+		carousel.captionHTML.push(captionHTML);
+		*/
+	}
+
 	function searchFlickr() {
-		var query = 'https://api.flickr.com/services/rest/';
 		$.ajax({
 			data: {
 				method: 'flickr.photos.search',
@@ -79,15 +56,8 @@
 			},
 			dataType: 'jsonp',
 			jsonp: 'jsoncallback',
-			url: query,
-			success: function(response) {
-				$.each(response.photos.photo, function(i, photo) {
-					var base_url = 'https://farm' + photo.farm + '.staticflickr.com/' + photo.server + '/' + photo.id + '_' + photo.secret + '_b.jpg';
-					createCarouselItem(base_url);
-					getFlickrPhotoInfo(photo.id);
-				});
-				insertCarouselItems();
-			}
+			url: 'https://api.flickr.com/services/rest/',
+			success: createPhotos
 		});
 	}
 
@@ -96,6 +66,7 @@
 		this.latitude = 37.8083; // north
 		this.longitude = -122.4156; // west
 		this.searchTerm = ko.observable();
+		this.photos = ko.observableArray([]);
 		this.locations = ko.observableArray([
 			{
 				name: 'Harry\'s Diner',
@@ -114,6 +85,41 @@
 		};
 	}
 
+	/** Photo
+	 * A knockout-compatible class for flickr images.
+	 * fileext is a string like 'jpg' or 'png'.
+	 */
+	function Photo(farm, server, id, secret, size, fileext, realname, username, description) {
+		this.farm = ko.observable(farm);
+		this.server = ko.observable(server);
+		this.id = ko.observable(id);
+		this.secret = ko.observable(secret);
+		this.size = ko.observable(size);
+		this.fileext = ko.observable(fileext);
+		this.realname = ko.observable(realname);
+		this.username = ko.observable(username);
+		this.description = ko.observable(description);
+
+		this.url = ko.computed(function() {
+			return 'https://farm' + this.farm() + '.staticflickr.com/' + this.server() + '/' + this.id() + '_' + this.secret() + '_' + this.size() + '.' + this.fileext();
+		}, this);
+
+		this.imgHTML = ko.computed(function() {
+			return '<img src="' + this.url() + '">';
+		}, this);
+	}
+
+	/* the success function for the flickr api. */
+	function createPhotos(response) {
+		$.each(response.photos.photo, function(i, photo) {
+			var tmp = new Photo(photo.farm, photo.server, photo.id, photo.secret, 'b', 'jpg');
+			getFlickrPhotoInfo(tmp.id(), tmp); // also puts the temporary photo into the viewmodel
+		});
+	}
+
+	/* initialize()
+	 * Contains the settings for the google maps api, executed on window load.
+	 */
 	function initialize() {
 		var latLng = new google.maps.LatLng(37.8083, -122.4156);
 		var mapOptions = {
@@ -128,10 +134,11 @@
 		};
 		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 	}
+
 	google.maps.event.addDomListener(window, 'load', initialize);
 
-	ko.applyBindings(new ViewModel());
+	var viewModel = new ViewModel();
+	ko.applyBindings(viewModel);
 
 	searchFlickr();
-	console.log(carousel);
 })(jQuery);

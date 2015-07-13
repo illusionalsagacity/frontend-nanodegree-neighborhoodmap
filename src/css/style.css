@@ -22,3 +22,6 @@ textarea {
   font-size: 16px;
 }
 
+.carousel-inner>.item>img {
+	margin: 0 auto;
+}
