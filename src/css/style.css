@@ -1,19 +1,19 @@
 /* file: style.css */
 
 body {
-	padding: 70px 0 50px;
+    padding: 70px 0 50px;
 }
 
 .form-inline {
-	margin: 0 0 20px;
+    margin: 0 0 20px;
 }
 
 .tab-content {
-	padding: 20px 0 0;
+    padding: 20px 0 0;
 }
 
 .input-group {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 input[type='text'],
@@ -23,5 +23,5 @@ textarea {
 }
 
 .carousel-inner>.item>img {
-	margin: 0 auto;
+    margin: 0 auto;
 }
