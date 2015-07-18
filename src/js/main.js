@@ -3,12 +3,17 @@
 (function($) {
     'use strict';
 
-    function api_getFlickrPhotoInfo(pid, photo) {
+    var
+    	flickrAPIKey = '6b24b2e754fe7ea499e2db41d1daa866',
+    	foursquareClientID = '012MYNBUF2VK2SQK5C40HT0ZBX1255ZJGCG4XKYNTZ33DKE1',
+    	foursquareClientSecret = 'ZLIFE0L5WIZ21LUARPYY3OFFWCUWUU3IVR42IEUUREGHBL3F';
+
+    function api_flickrGetPhotoInfo(pid, photo) {
         var query = 'https://api.flickr.com/services/rest/';
         $.ajax({
             data: {
                 method: 'flickr.photos.getInfo',
-                api_key: '6b24b2e754fe7ea499e2db41d1daa866',
+                api_key: flickrAPIKey,
                 format: 'json',
                 photo_id: pid
             },
@@ -28,11 +33,27 @@
         viewModel.photos.push(photo);
     }
 
-    function api_searchFlickr() {
+    function api_foursquareExplore() {
+    	$.ajax({
+    		data: {
+    			client_id: foursquareClientID,
+    			client_secret: foursquareClientSecret,
+    			ll: '37.8083,-122.4156',
+    			v: '20150717'
+    		},
+    		dataType: 'jsonp',
+    		url: 'https://api.foursquare.com/v2/venues/explore',
+    		success: function(response) {
+    			console.log(response.response.groups[0].items);
+    		}
+    	})
+    }
+
+    function api_flickrSearch() {
         $.ajax({
             data: {
                 method: 'flickr.photos.search',
-                api_key: '6b24b2e754fe7ea499e2db41d1daa866',
+                api_key: flickrAPIKey,
                 safe_search: 1,
                 content_type: 1,
                 woe_id: 28288708,
@@ -98,7 +119,7 @@
     function createPhotos(response) {
         $.each(response.photos.photo, function(i, photo) {
             var tmp = new Photo(photo.farm, photo.server, photo.id, photo.secret, 'b', 'jpg');
-            api_getFlickrPhotoInfo(tmp.id(), tmp); // also puts the temporary photo into the viewmodel
+            api_flickrGetPhotoInfo(tmp.id(), tmp); // also puts the temporary photo into the viewmodel.
         });
     }
 
@@ -125,5 +146,6 @@
     var viewModel = new ViewModel();
     ko.applyBindings(viewModel);
 
-    api_searchFlickr();
+    api_flickrSearch();
+    api_foursquareExplore();
 })(jQuery);
