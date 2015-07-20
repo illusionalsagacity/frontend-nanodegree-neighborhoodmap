@@ -9,9 +9,9 @@
 
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbTwwP1IjRKbE-qpOrydqZnwuWF_BplQY"></script>
 
-        <link rel="stylesheet" href="vendor\css\bootstrap.min.css">
-        <link rel="stylesheet" href="vendor\css\bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css\style.min.css">
+        <link rel="stylesheet" href="vendor/css/bootstrap.min.css">
+        <link rel="stylesheet" href="vendor/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/style.min.css">
 
 
         <!-- template: carousel-indicator -->
@@ -54,6 +54,7 @@
                 </div>
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
+                        <li><a href="#">Flickr</a></li>
                         <li><a href="#" data-toggle="modal" data-target="#aboutModal">About</a></li>
                     </ul>
                 </div>
@@ -75,6 +76,7 @@
             </div>
         </div>
 
+        <div id="map-canvas" class="embed-responsive embed-responsive-4by3"></div>
         <div class="container">
             <div class="row">
             <h1 class="page-header">San Francisco - Fisherman&apos;s Wharf</h1>
@@ -87,17 +89,12 @@
 
                 <div role="tabpanel">
                     <ul class="nav nav-pills" role="tablist">
-                        <li role="presentation" class="active"><a href="#map" aria-controls="map" role="tab" data-toggle="tab">Map View</a></li>
-                        <li role="presentation"><a href="#list" aria-controls="list" role="tab" data-toggle="tab">List View</a></li>
+                        <li class="active" role="presentation"><a href="#list" aria-controls="list" role="tab" data-toggle="tab">List View</a></li>
                         <li role="presentation"><a href="#flickr" aria-controls="flickr" role="tab" data-toggle="tab">Flickr API</a></li>
                     </ul>
 
                     <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="map">
-                            <div id="map-canvas" class="embed-responsive embed-responsive-4by3"></div>
-                        </div>
-
-                        <div role="tabpanel" class="tab-pane" id="list">
+                        <div role="tabpanel" class="tab-pane active" id="list">
                             <div class="panel panel-default">
                                 <div class="panel-heading"><h3 class="panel-title">Interesting Places:</h3></div>
                                 <div class="panel-body"></div>
@@ -128,9 +125,9 @@
             </div>
         </div>
 
-        <script src="vendor\js\jquery.min.js"></script>
-        <script src="vendor\js\bootstrap.min.js"></script>
-        <script src="vendor\js\knockout.js"></script>
-        <script src="js\main.min.js"></script>
+        <script src="vendor/js/jquery.min.js"></script>
+        <script src="vendor/js/bootstrap.min.js"></script>
+        <script src="vendor/js/knockout.js"></script>
+        <script src="js/main.min.js"></script>
     </body>
 </html>

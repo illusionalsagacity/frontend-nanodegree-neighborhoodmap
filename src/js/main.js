@@ -46,7 +46,7 @@
     		success: function(response) {
     			console.log(response.response.groups[0].items);
     		}
-    	})
+    	});
     }
 
     function api_flickrSearch() {
@@ -76,6 +76,9 @@
         this.longitude = -122.4156; // west
         this.searchTerm = ko.observable();
         this.photos = ko.observableArray([]);
+
+        this.myLocations = ko.observableArray([]);
+
         this.locations = ko.observableArray([
             {
                 name: 'Harry\'s Diner',
@@ -92,6 +95,15 @@
             console.log(text);
             alert(text);
         };
+    }
+
+    /* Location
+     */
+    function Location(name, lat, lng) {
+        this.name = ko.observable(name);
+        this.lat = ko.observable(lat);
+        this.lng = ko.observable(lng);
+
     }
 
     /* Photo
