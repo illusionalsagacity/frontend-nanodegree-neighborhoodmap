@@ -9,24 +9,38 @@
 
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbTwwP1IjRKbE-qpOrydqZnwuWF_BplQY"></script>
 
-        <link rel="stylesheet" href="vendor/css/bootstrap.min.css">
-        <link rel="stylesheet" href="vendor/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="css/style.min.css">
-
+        <link rel="stylesheet" href="vendor\css\bootstrap.min.css">
+        <link rel="stylesheet" href="vendor\css\bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css\style.min.css">
 
         <!-- template: carousel-indicator -->
         <script type="text/html" id="carousel-indicator-template">
+            <!-- ko if: $index() === 0 -->
+            <li class="active" data-target="#flickr-content" data-bind="attr: { 'data-slide-to': $index }"></li>
+            <!-- /ko --><!-- ko if: $index() !== 0 -->
             <li data-target="#flickr-content" data-bind="attr: { 'data-slide-to': $index }"></li>
+            <!-- /ko -->
         </script>
 
         <!-- template: carousel-item -->
         <script type="text/html" id="carousel-item-template">
+            <!-- ko if: $index() === 0 -->
+            <div class="item active">
+                <img data-bind="attr: { src: url }">
+                <div class="carousel-caption">
+                    <p data-bind="text: description"></p>
+                </div>
+            </div>
+            <!-- /ko -->
+            <!-- ko if: $index() !== 0 -->
             <div class="item">
                 <img data-bind="attr: { src: url }">
                 <div class="carousel-caption">
                     <p data-bind="text: description"></p>
                 </div>
             </div>
+            <!-- /ko -->
+
         </script>
 
         <!-- a knockout template for the list -->
@@ -34,7 +48,6 @@
             <li class="list-group-item">
                 <h3 data-bind="text: name"></h3>
                 <span data-bind="text: description"></span>
-                <span data-bind="text: address"></span>
             </li>
         </script>
 
@@ -115,19 +128,16 @@
                                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                                     <span class="sr-only">Next</span>
                                 </a>
-
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </div>
 
-        <script src="vendor/js/jquery.min.js"></script>
-        <script src="vendor/js/bootstrap.min.js"></script>
-        <script src="vendor/js/knockout.js"></script>
-        <script src="js/main.min.js"></script>
+        <script src="vendor\js\jquery.min.js"></script>
+        <script src="vendor\js\bootstrap.min.js"></script>
+        <script src="vendor\js\knockout.js"></script>
+        <script src="js\main.min.js"></script>
     </body>
 </html>
