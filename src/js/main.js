@@ -20,7 +20,7 @@
             dataType: 'jsonp',
             jsonp: 'jsoncallback',
             url: query,
-            success: function(response) {
+            success: function(response) { // workaround to pass more than one parameter.
                 setPhotoInfo(response, photo);
             }
         });
@@ -33,6 +33,13 @@
         viewModel.photos.push(photo);
     }
 
+    function createLocations(response) {
+        $.each(response.response.groups[0].items, function(i, location) {
+            var tmp = new Location(location.venue.name, location.tips[0].text, location.venue.location.lat, location.venue.location.lng, location.venue.rating);
+            viewModel.locations.push(tmp);
+        });
+    }
+
     function api_foursquareExplore() {
     	$.ajax({
     		data: {
@@ -43,9 +50,7 @@
     		},
     		dataType: 'jsonp',
     		url: 'https://api.foursquare.com/v2/venues/explore',
-    		success: function(response) {
-    			console.log(response.response.groups[0].items);
-    		}
+    		success: createLocations
     	});
     }
 
@@ -79,15 +84,7 @@
 
         this.myLocations = ko.observableArray([]);
 
-        this.locations = ko.observableArray([
-            {
-                name: 'Harry\'s Diner',
-                description: 'A small diner!',
-                address: '',
-                lat: 37.8083,
-                lng: -122.4157,
-            },
-        ]);
+        this.locations = ko.observableArray([]);
 
         // TODO: finish.
         this.searchFor = function(formElement) {
@@ -99,11 +96,12 @@
 
     /* Location
      */
-    function Location(name, lat, lng) {
+    function Location(name, desc, lat, lng, rating) {
         this.name = ko.observable(name);
+        this.description = ko.observable(desc);
         this.lat = ko.observable(lat);
         this.lng = ko.observable(lng);
-
+        this.rating = ko.observable(rating);
     }
 
     /* Photo
@@ -156,8 +154,9 @@
     google.maps.event.addDomListener(window, 'load', initialize);
 
     var viewModel = new ViewModel();
-    ko.applyBindings(viewModel);
 
     api_flickrSearch();
     api_foursquareExplore();
+
+    ko.applyBindings(viewModel);
 })(jQuery);
