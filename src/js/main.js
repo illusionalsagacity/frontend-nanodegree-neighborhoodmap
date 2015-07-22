@@ -114,6 +114,22 @@
                     map: map,
                     title: location.name()
                 });
+
+                var contentString = '<div id="content">' +
+                '<div id="siteNotice">' +
+                '<h1 id="firstHeading" class="firstHeading">' + location.name() + '</h1>' +
+                '<div id="bodyContent">' +
+                '<p>' + location.description() + '</p>' +
+                '</div' +
+                '</div>';
+
+                var infowindow = new google.maps.InfoWindow({
+                    content: contentString
+                });
+
+                google.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map, marker);
+                });
             });
         };
     }
