@@ -86,11 +86,35 @@
 
         this.locations = ko.observableArray([]);
 
+        // google maps
+        var latLng = new google.maps.LatLng(37.8083, -122.4156);
+        var mapOptions = {
+            center: latLng,
+            draggable: true,
+            disableDefaultUI: true,
+            disableDoubleClickZoom: true,
+            scrollwheel: false,
+            panControl: false,
+            zoom: 17,
+            zoomControl: false,
+        };
+        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
         // TODO: finish.
         this.searchFor = function(formElement) {
             var text = $('#search', formElement).val();
             console.log(text);
             alert(text);
+        };
+
+        this.createMarkers = function() {
+            this.locations().forEach(function(location) {
+                var marker = new google.maps.Marker({
+                    position: new google.maps.LatLng(location.lat(), location.lng()),
+                    map: map,
+                    title: location.name()
+                });
+            });
         };
     }
 
@@ -132,26 +156,6 @@
             api_flickrGetPhotoInfo(tmp.id(), tmp); // also puts the temporary photo into the viewmodel.
         });
     }
-
-    /* initialize()
-     * Contains the settings for the google maps api, executed on window load.
-     */
-    function initialize() {
-        var latLng = new google.maps.LatLng(37.8083, -122.4156);
-        var mapOptions = {
-            center: latLng,
-            draggable: false,
-            disableDefaultUI: true,
-            disableDoubleClickZoom: true,
-            scrollwheel: false,
-            panControl: false,
-            zoom: 17,
-            zoomControl: false,
-        };
-        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-    }
-
-    google.maps.event.addDomListener(window, 'load', initialize);
 
     var viewModel = new ViewModel();
 
