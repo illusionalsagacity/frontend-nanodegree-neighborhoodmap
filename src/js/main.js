@@ -1,15 +1,15 @@
 /* file: main.js */
 
-(function($) {
+jQuery(function($) {
     'use strict';
 
     var
-    	flickrAPIKey = '6b24b2e754fe7ea499e2db41d1daa866',
-    	foursquareClientID = '012MYNBUF2VK2SQK5C40HT0ZBX1255ZJGCG4XKYNTZ33DKE1',
-    	foursquareClientSecret = 'ZLIFE0L5WIZ21LUARPYY3OFFWCUWUU3IVR42IEUUREGHBL3F';
+        flickrAPIKey = '6b24b2e754fe7ea499e2db41d1daa866',
+        flickrAPIUrl = 'https://api.flickr.com/services/rest',
+        foursquareClientID = '012MYNBUF2VK2SQK5C40HT0ZBX1255ZJGCG4XKYNTZ33DKE1',
+        foursquareClientSecret = 'ZLIFE0L5WIZ21LUARPYY3OFFWCUWUU3IVR42IEUUREGHBL3F';
 
     function api_flickrGetPhotoInfo(pid, photo) {
-        var query = 'https://api.flickr.com/services/rest/';
         $.ajax({
             data: {
                 method: 'flickr.photos.getInfo',
@@ -19,9 +19,16 @@
             },
             dataType: 'jsonp',
             jsonp: 'jsoncallback',
-            url: query,
+            url: flickrAPIUrl,
             success: function(response) { // workaround to pass more than one parameter.
                 setPhotoInfo(response, photo);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                viewModel.errors.push(new Error(
+                    'Flickr API Error',
+                    'Could not retrieve Flickr search data.'
+                    )
+                );
             }
         });
     }
@@ -35,23 +42,46 @@
 
     function createLocations(response) {
         $.each(response.response.groups[0].items, function(i, location) {
-            var tmp = new Location(location.venue.name, location.tips[0].text, location.venue.location.lat, location.venue.location.lng, location.venue.rating);
+            var address = location.venue.location.address + ', ' +
+                location.venue.location.city + ', ' +
+                location.venue.location.state + ' ' +
+                location.venue.location.postalCode + ', ' +
+                location.venue.location.country;
+
+            var tmp = new Location(
+                location.venue.name,
+                address,
+                location.tips[0].text,
+                location.venue.location.lat,
+                location.venue.location.lng,
+                location.venue.rating
+            );
+
             viewModel.locations.push(tmp);
         });
     }
 
     function api_foursquareExplore() {
-    	$.ajax({
-    		data: {
-    			client_id: foursquareClientID,
-    			client_secret: foursquareClientSecret,
-    			ll: '37.8083,-122.4156',
-    			v: '20150717'
-    		},
-    		dataType: 'jsonp',
-    		url: 'https://api.foursquare.com/v2/venues/explore',
-    		success: createLocations
-    	});
+        $.ajax({
+            data: {
+                client_id: foursquareClientID,
+                client_secret: foursquareClientSecret,
+                ll: '37.8083,-122.4156',
+                v: '20150717'
+            },
+            dataType: 'jsonp',
+            url: 'https://api.foursquare.com/v2/venues/explore',
+            success: createLocations,
+            error: function(jqXHR, textStatus, errorThrown) {
+                viewModel.errors.push(new Error(
+                    'Foursquare API Error',
+                    'Could not retrieve Foursquare data.'
+                    )
+                );
+            }
+        }).done(function() {
+            viewModel.createMarkers();
+        });
     }
 
     function api_flickrSearch() {
@@ -70,7 +100,11 @@
             url: 'https://api.flickr.com/services/rest/',
             success: createPhotos,
             error: function(jqXHR, textStatus, errorThrown) {
-                console.log(textStatus);
+                viewModel.errors.push(new Error(
+                    'Flickr API Error',
+                    'Could not retrieve Flickr search data.'
+                    )
+                );
             }
         });
     }
@@ -80,11 +114,10 @@
         this.latitude = 37.8083; // north
         this.longitude = -122.4156; // west
         this.searchTerm = ko.observable();
-        this.photos = ko.observableArray([]);
+        this.photos = ko.observableArray();
+        this.locations = ko.observableArray();
 
-        this.myLocations = ko.observableArray([]);
-
-        this.locations = ko.observableArray([]);
+        this.errors = ko.observableArray();
 
         // google maps
         var latLng = new google.maps.LatLng(37.8083, -122.4156);
@@ -98,6 +131,7 @@
             zoom: 17,
             zoomControl: false,
         };
+        var markers = [];
         var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
         // TODO: finish.
@@ -120,7 +154,8 @@
                 '<h1 id="firstHeading" class="firstHeading">' + location.name() + '</h1>' +
                 '<div id="bodyContent">' +
                 '<p>' + location.description() + '</p>' +
-                '</div' +
+                '<p>' + location.address() + '</p>' +
+                '</div>' +
                 '</div>';
 
                 var infowindow = new google.maps.InfoWindow({
@@ -130,13 +165,24 @@
                 google.maps.event.addListener(marker, 'click', function() {
                     infowindow.open(map, marker);
                 });
+
+                markers.push(marker);
             });
         };
     }
 
+    /* Error
+     * A class for a knockout-compatible error message to be displayed.
+     */
+    function Error(title, desc) {
+        this.title = ko.observable(title);
+        this.description = ko.observable(desc);
+    }
+
     /* Location
      */
-    function Location(name, desc, lat, lng, rating) {
+    function Location(name, address, desc, lat, lng, rating) {
+        this.address = ko.observable(address);
         this.name = ko.observable(name);
         this.description = ko.observable(desc);
         this.lat = ko.observable(lat);
@@ -179,4 +225,4 @@
     api_foursquareExplore();
 
     ko.applyBindings(viewModel);
-})(jQuery);
+});

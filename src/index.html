@@ -13,6 +13,16 @@
         <link rel="stylesheet" href="vendor/css/bootstrap-theme.css" data-min="bootstrap-theme.min.css">
         <link rel="stylesheet" href="css/style.css" data-min="style.min.css">
 
+
+        <!-- template: error -->
+        <script type="text/html" id="error-template">
+            <div class="alert alert-dismissable alert-danger fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 data-bind="text: title"></h4>
+                <p data-bind="text: description"></p>
+            </div>
+        </script>
+
         <!-- template: carousel-indicator -->
         <script type="text/html" id="carousel-indicator-template">
             <!-- ko if: $index() === 0 -->
@@ -46,8 +56,8 @@
         <script type="text/html" id="location-list-template">
             <li class="list-group-item">
                 <h3 data-bind="text: name"></h3>
-                <span data-bind="text: rating"></span>
-                <span data-bind="text: description"></span>
+                <p>Rating: <span data-bind="text: rating"></span></p>
+                <p data-bind="text: description"></p>
             </li>
         </script>
 
@@ -55,7 +65,7 @@
 
     <body>
         <nav class="navbar navbar-inverse navbar-fixed-top">
-            <div class="container">
+            <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
                         <span class="sr-only">Toggle navigation</span>
@@ -93,12 +103,11 @@
             </div>
         </div>
 
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
                 <h1 class="page-header">Fisherman's Wharf <small>San Francisco</small></h1>
 
-                <!-- temporary -->
-                <button type="button" class="btn btn-default" data-bind="click: createMarkers">Create Markers</button>
+                <div data-bind="template: { name: 'error-template', foreach: errors }"></div>
 
                     <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="map">
