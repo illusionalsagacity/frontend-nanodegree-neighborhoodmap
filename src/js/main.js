@@ -20,8 +20,8 @@ jQuery(function($) {
             dataType: 'jsonp',
             jsonp: 'jsoncallback',
             url: flickrAPIUrl,
-            success: function(response) { // workaround to pass more than one parameter.
-                setPhotoInfo(response, photo);
+            success: function(response) {
+                setPhotoInfo(response, photo); // workaround to pass more than one parameter.
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 viewModel.errors.push(new Error(
@@ -38,27 +38,6 @@ jQuery(function($) {
         photo.username(response.photo.owner.username);
         photo.description(response.photo.description._content);
         viewModel.photos.push(photo);
-    }
-
-    function createLocations(response) {
-        $.each(response.response.groups[0].items, function(i, location) {
-            var address = location.venue.location.address + ', ' +
-                location.venue.location.city + ', ' +
-                location.venue.location.state + ' ' +
-                location.venue.location.postalCode + ', ' +
-                location.venue.location.country;
-
-            var tmp = new Location(
-                location.venue.name,
-                address,
-                location.tips[0].text,
-                location.venue.location.lat,
-                location.venue.location.lng,
-                location.venue.rating
-            );
-
-            viewModel.locations.push(tmp);
-        });
     }
 
     function api_foursquareExplore() {
@@ -81,6 +60,27 @@ jQuery(function($) {
             }
         }).done(function() {
             viewModel.createMarkers();
+        });
+    }
+
+    function createLocations(response) {
+        $.each(response.response.groups[0].items, function(i, location) {
+            var address = location.venue.location.address + ', ' +
+                location.venue.location.city + ', ' +
+                location.venue.location.state + ' ' +
+                location.venue.location.postalCode + ', ' +
+                location.venue.location.country;
+
+            var tmp = new Location(
+                location.venue.name,
+                address,
+                location.tips[0].text,
+                location.venue.location.lat,
+                location.venue.location.lng,
+                location.venue.rating
+            );
+
+            viewModel.locations.push(tmp);
         });
     }
 
@@ -217,6 +217,7 @@ jQuery(function($) {
             var tmp = new Photo(photo.farm, photo.server, photo.id, photo.secret, 'b', 'jpg');
             api_flickrGetPhotoInfo(tmp.id(), tmp); // also puts the temporary photo into the viewmodel.
         });
+        viewModel.photos.valueHasMutated();
     }
 
     var viewModel = new ViewModel();

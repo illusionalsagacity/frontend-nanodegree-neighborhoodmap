@@ -11,6 +11,8 @@
 
         <link rel="stylesheet" href="vendor/css/bootstrap.css" data-min="bootstrap.min.css">
         <link rel="stylesheet" href="vendor/css/bootstrap-theme.css" data-min="bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/offline-theme-chrome.css" data-min="offline-theme-chrome.min.css">
+        <link rel="stylesheet" href="css/offline-theme-english.css" data-min="offline-theme-english.min.css">
         <link rel="stylesheet" href="css/style.css" data-min="style.min.css">
 
 
@@ -22,6 +24,7 @@
                 <p data-bind="text: description"></p>
             </div>
         </script>
+
 
         <!-- template: carousel-indicator -->
         <script type="text/html" id="carousel-indicator-template">
@@ -54,11 +57,15 @@
 
         <!-- a knockout template for the list -->
         <script type="text/html" id="location-list-template">
-            <li class="list-group-item">
-                <h3 data-bind="text: name"></h3>
-                <p>Rating: <span data-bind="text: rating"></span></p>
-                <p data-bind="text: description"></p>
-            </li>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title" data-bind="text: name"></h3>
+                </div>
+                <div class="panel-body">
+                    <p>Rating: <span data-bind="text: rating"></span></p>
+                    <p data-bind="text: description"></p>
+                </div>
+            </div>
         </script>
 
     </head>
@@ -78,7 +85,6 @@
                 <div id="navbar" class="navbar-collapse collapse">
                     <ul class="nav navbar-nav navbar-left">
                         <li class="active" role="presentation"><a href="#map" aria-controls="map" role="tab" data-toggle="tab">Map</a></li>
-                        <li role="presentation"><a href="#list" aria-controls="list" role="tab" data-toggle="tab">List</a></li>
                         <li role="presentation"><a href="#flickr" aria-controls="flickr" role="tab" data-toggle="tab">Flickr</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
@@ -109,22 +115,18 @@
 
                 <div data-bind="template: { name: 'error-template', foreach: errors }"></div>
 
-                    <div class="tab-content">
+
+                <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="map">
-                        <div id="map-canvas" class="embed-responsive embed-responsive-4by3"></div>
-                    </div>
-
-
-                    <div role="tabpanel" class="tab-pane" id="list">
-                        <div class="panel panel-default">
-                            <div class="panel-heading"><h3 class="panel-title">Interesting Places:</h3></div>
-                            <div class="panel-body"></div>
-                            <ul class="list-group" data-bind="template: { name: 'location-list-template', foreach: locations }">
-                            </ul>
+                        <div class="col-md-8">
+                            <div id="map-canvas"></div>
                         </div>
+                        <div class="col-md-4" id="list" data-bind="template: { name: 'location-list-template', foreach: locations }"></div>
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="flickr">
+
+                        <!-- ko if: photos().length != 0 -->
                         <div id="flickr-content" class="carousel" data-ride="carousel">
                             <ol class="carousel-indicators" data-bind="template: { name: 'carousel-indicator-template', foreach: photos }"></ol>
                             <div class="carousel-inner" role="listbox" data-bind="template: { name: 'carousel-item-template', foreach: photos }"></div>
@@ -137,15 +139,16 @@
                                 <span class="sr-only">Next</span>
                             </a>
                         </div>
+                        <!-- /ko -->
                     </div>
                 </div>
             </div>
         </div>
 
-
         <script src="vendor/js/jquery.js" data-min="jquery.min.js"></script>
         <script src="vendor/js/bootstrap.js" data-min="bootstrap.min.js"></script>
         <script src="vendor/js/knockout.debug.js" data-min="knockout.js"></script>
         <script src="js/main.js" data-min="main.min.js"></script>
+        <script src="js/offline.js" data-min="offline.min.js"></script>
     </body>
 </html>
