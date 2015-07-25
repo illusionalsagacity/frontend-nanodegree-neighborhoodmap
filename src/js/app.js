@@ -145,8 +145,12 @@ jQuery(function($) {
             zoom: 17,
             zoomControl: false,
         };
-        var markers = [];
-        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+        var
+            normalIcon,
+            selectedMarker,
+            selectedInfoWindow,
+            map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
         // TODO: finish.
         this.searchFor = function(formElement) {
@@ -155,7 +159,7 @@ jQuery(function($) {
             alert(text);
         };
 
-        this.createMarkers = function() {
+                this.createMarkers = function() {
             this.locations().forEach(function(location) {
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(location.lat(), location.lng()),
@@ -165,23 +169,35 @@ jQuery(function($) {
                 });
 
                 var contentString = '<div id="content">' +
-                '<div id="siteNotice">' +
-                '<h1 id="firstHeading" class="firstHeading">' + location.name() + '</h1>' +
-                '<div id="bodyContent">' +
-                '<p>' + location.description() + '</p>' +
-                '<p>' + location.address() + '</p>' +
-                '</div>' +
-                '</div>';
+                    '<div id="siteNotice">' +
+                    '<h1 id="firstHeading" class="firstHeading">' + location.name() + '</h1>' +
+                    '<div id="bodyContent">' +
+                    '<p>' + location.description() + '</p>' +
+                    '<p>' + location.address() + '</p>' +
+                    '</div>' +
+                    '</div>';
 
                 var infowindow = new google.maps.InfoWindow({
-                    content: contentString
+                    content: contentString,
+                    maxWidth: 400
                 });
 
                 google.maps.event.addListener(marker, 'click', function() {
-                    infowindow.open(map, marker);
-                });
+                    if (selectedInfoWindow) {
+                        selectedInfoWindow.close();
+                    }
 
-                markers.push(marker);
+                    infowindow.open(map, marker);
+                    selectedInfoWindow = infowindow;
+
+                    if (selectedMarker) {
+                        selectedMarker.setIcon(normalIcon);
+                    }
+
+                    normalIcon = marker.getIcon();
+                    marker.setIcon('img/pin66.png');
+                    selectedMarker = marker;
+                });
             });
         };
     }

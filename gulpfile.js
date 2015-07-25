@@ -72,7 +72,6 @@ gulp.task('deploy:img', function() {
         .pipe(imagemin({
             progressive: true,
             svgoPlugins: [{removeViewBox: false}],
-            use: [pngquant()]
         }))
         .pipe(gulp.dest('dist/img'));
 })
@@ -87,9 +86,10 @@ gulp.task('dev:watch', function() {
     gulp.watch('src/js/*.js', ['deploy:js']);
     gulp.watch('src/css/*.css', ['deploy:css']);
     gulp.watch('src/*.html', ['deploy:html']);
+    gulp.watch('src/img/*.{gif,png,jpg,jpeg,svg}', ['deploy:img']);
 });
 
-gulp.task('deploy', ['deploy:html', 'deploy:css', 'deploy:js']);
+gulp.task('deploy', ['deploy:html', 'deploy:css', 'deploy:js', 'deploy:img']);
 gulp.task('vendor', ['vendor:bootstrap', 'vendor:jquery', 'vendor:knockout']);
 
 gulp.task('default', ['deploy']);

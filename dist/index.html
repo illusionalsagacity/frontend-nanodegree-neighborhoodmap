@@ -105,6 +105,7 @@
                         <p>This neighborhood map project was created as a part of the Udacity Front End Nanodegree program.</p>
                         <p>Created with the Bootstrap framework, jQuery, Knockout, and Offline.js javascript libraries.</p>
                         <p>Images are retrieved using the Flickr api, and locations are retrieved using the Foursquare api. Icons are also from Foursquare.</p>
+                        <p>Black pin icon courtesy of <a href="http://www.flaticon.com/authors/bogdan-rosu" title="Bogdan Rosu">Bogdan Rosu</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></p>
                     </div>
                 </div>
             </div>
@@ -120,7 +121,7 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="map">
                         <div class="col-md-8">
-                            <div id="map-canvas"></div>
+                            <div id="map-canvas" class="embed-responsive embed-responsive-4by3"></div>
                         </div>
                         <div class="col-md-4" id="list" data-bind="template: { name: &apos;location-list-template&apos;, foreach: locations }"></div>
                     </div>
@@ -146,10 +147,10 @@
             </div>
         </div>
 
-        <script src="vendor\js\jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="vendor\js\bootstrap.min.js"></script>
-        <script src="vendor\js\knockout.js"></script>
-        <script src="js\main.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+        <script src="js\app.min.js"></script>
         <script src="js\offline.min.js"></script>
     </body>
 </html>
