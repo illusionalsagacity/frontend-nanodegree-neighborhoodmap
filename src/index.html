@@ -59,19 +59,22 @@
         <script type="text/html" id="location-list-template">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title" data-bind="text: name"></h3>
+                    <h3 class="panel-title">
+                        <span data-bind="text: name"></span>
+                        <span class="label label-primary" data-bind="text: rating, style: { backgroundColor: '#' + ratingColor() } "></span>
+                    </h3>
                 </div>
                 <div class="panel-body">
-                    <p>Rating: <span data-bind="text: rating"></span></p>
                     <p data-bind="text: description"></p>
                 </div>
+                <div class="panel-footer" data-bind="text: address"></div>
             </div>
         </script>
 
     </head>
 
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top">
+        <nav class="navbar navbar-default navbar-fixed-top">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
@@ -87,6 +90,12 @@
                         <li class="active" role="presentation"><a href="#map" aria-controls="map" role="tab" data-toggle="tab">Map</a></li>
                         <li role="presentation"><a href="#flickr" aria-controls="flickr" role="tab" data-toggle="tab">Flickr</a></li>
                     </ul>
+                    <form class="navbar-form navbar-left" data-bind="submit: searchFor">
+                        <div class="form-group">
+                            <input type="text" id="search" class="form-control" data-bind="textInput: searchTerm" placeholder="Filter list">
+                        </div>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </form>
                     <ul class="nav navbar-nav navbar-right">
                         <li role="presentation"><a href="#" data-toggle="modal" data-target="#aboutModal">About</a></li>
                     </ul>
@@ -104,7 +113,7 @@
                     <div class="modal-body">
                         <p>This neighborhood map project was created as a part of the Udacity Front End Nanodegree program.</p>
                         <p>Created with the Bootstrap framework, jQuery, Knockout, and Offline.js javascript libraries.</p>
-                        <p>Images are retrieved using the Flickr api, and locations are retrieved using the Foursquare api. Icons are also from Foursquare.</p>
+                        <p>Images are retrieved using the Flickr API, and locations are retrieved using the Foursquare API. Icons are also from Foursquare.</p>
                         <p>Black pin icon courtesy of <a href="http://www.flaticon.com/authors/bogdan-rosu" title="Bogdan Rosu">Bogdan Rosu</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a>             is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></p>
                     </div>
                 </div>
@@ -150,6 +159,8 @@
         <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
         <script src="vendor/js/bootstrap.js" data-min="bootstrap.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+        <script src="js/knockout.mapping-latest.js" data-min="knockout.mapping-latest.min.js"></script>
+        <script src="js/knockout.search-latest.js" data-min="knockout.search-latest.min.js"></script>
         <script src="js/app.js" data-min="app.min.js"></script>
         <script src="js/offline.js" data-min="offline.min.js"></script>
     </body>

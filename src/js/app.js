@@ -90,6 +90,7 @@ jQuery(function($) {
                 location.venue.location.lat,
                 location.venue.location.lng,
                 location.venue.rating,
+                location.venue.ratingColor,
                 categories,
                 iconUrl
             );
@@ -124,14 +125,18 @@ jQuery(function($) {
     }
 
     function ViewModel() {
-        this.appName = 'Neighborhood Map';
-        this.latitude = 37.8083; // north
-        this.longitude = -122.4156; // west
-        this.searchTerm = ko.observable();
-        this.photos = ko.observableArray();
-        this.locations = ko.observableArray();
+        var self = this;
 
-        this.errors = ko.observableArray();
+        self.appName = 'Neighborhood Map';
+        self.latitude = 37.8083; // north
+        self.longitude = -122.4156; // west
+        self.searchTerm = ko.observable();
+        self.photos = ko.observableArray();
+        self.locations = ko.observableArray();
+
+        var mystuff = ko.search.setData(self.locations());
+
+        self.errors = ko.observableArray();
 
         // google maps
         var latLng = new google.maps.LatLng(37.8083, -122.4156);
@@ -154,13 +159,11 @@ jQuery(function($) {
 
         // TODO: finish.
         this.searchFor = function(formElement) {
-            var text = $('#search', formElement).val();
-            console.log(text);
-            alert(text);
-        };
 
-                this.createMarkers = function() {
-            this.locations().forEach(function(location) {
+        }
+
+        self.createMarkers = function() {
+            self.locations().forEach(function(location) {
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(location.lat(), location.lng()),
                     map: map,
@@ -212,13 +215,14 @@ jQuery(function($) {
 
     /* Location
      */
-    function Location(name, address, desc, lat, lng, rating, categories, iconUrl) {
+    function Location(name, address, desc, lat, lng, rating, ratingColor, categories, iconUrl) {
         this.address = ko.observable(address);
         this.name = ko.observable(name);
         this.description = ko.observable(desc);
         this.lat = ko.observable(lat);
         this.lng = ko.observable(lng);
         this.rating = ko.observable(rating);
+        this.ratingColor = ko.observable(ratingColor)
         this.category = ko.observableArray(categories);
         this.iconURL = ko.observable(iconUrl);
     }
