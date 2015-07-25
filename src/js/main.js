@@ -71,15 +71,30 @@ jQuery(function($) {
                 location.venue.location.postalCode + ', ' +
                 location.venue.location.country;
 
+            var categories = [];
+            location.venue.categories.forEach(function(category) {
+                categories.push(category.name);
+            });
+
+            var iconUrl;
+            if (typeof location.venue.categories !== "undefined") {
+                iconUrl = location.venue.categories[0].icon.prefix + 'bg_32' + location.venue.categories[0].icon.suffix;
+            } else {
+                iconUrl = '';
+            }
+
             var tmp = new Location(
                 location.venue.name,
                 address,
                 location.tips[0].text,
                 location.venue.location.lat,
                 location.venue.location.lng,
-                location.venue.rating
+                location.venue.rating,
+                categories,
+                iconUrl
             );
 
+            console.log(iconUrl);
             viewModel.locations.push(tmp);
         });
     }
@@ -146,7 +161,8 @@ jQuery(function($) {
                 var marker = new google.maps.Marker({
                     position: new google.maps.LatLng(location.lat(), location.lng()),
                     map: map,
-                    title: location.name()
+                    title: location.name(),
+                    icon: location.iconURL()
                 });
 
                 var contentString = '<div id="content">' +
@@ -181,13 +197,15 @@ jQuery(function($) {
 
     /* Location
      */
-    function Location(name, address, desc, lat, lng, rating) {
+    function Location(name, address, desc, lat, lng, rating, categories, iconUrl) {
         this.address = ko.observable(address);
         this.name = ko.observable(name);
         this.description = ko.observable(desc);
         this.lat = ko.observable(lat);
         this.lng = ko.observable(lng);
         this.rating = ko.observable(rating);
+        this.category = ko.observableArray(categories);
+        this.iconURL = ko.observable(iconUrl);
     }
 
     /* Photo

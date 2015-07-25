@@ -27,6 +27,7 @@ This project uses these external libraries and frameworks, which have their own 
 - [jQuery](https://github.com/jquery/jquery/blob/master/LICENSE.txt)
 - [Bootstrap](https://github.com/twbs/bootstrap/blob/master/LICENSE)
 - [Knockout.js](https://github.com/knockout/knockout/blob/master/LICENSE)
+- [offline.js](https://github.com/HubSpot/offline/blob/master/LICENSE)
 
 This project uses the following external tools for building:
 
