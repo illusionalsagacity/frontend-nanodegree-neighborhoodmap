@@ -94,7 +94,6 @@ jQuery(function($) {
                 iconUrl
             );
 
-            console.log(iconUrl);
             viewModel.locations.push(tmp);
         });
     }
