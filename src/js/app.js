@@ -94,7 +94,6 @@ jQuery(function($) {
 	            categories,
 	            iconUrl
 	        );
-
 	        viewModel.locations.push(tmp);
 	    });
 	}
@@ -137,6 +136,5 @@ jQuery(function($) {
 
 	api_flickrSearch();
 	api_foursquareExplore();
-
     ko.applyBindings(viewModel);
 });

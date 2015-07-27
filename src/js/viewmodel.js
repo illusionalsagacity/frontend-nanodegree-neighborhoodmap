@@ -10,9 +10,23 @@ function ViewModel() {
     self.longitude = -122.4156; // west
     self.searchTerm = ko.observable();
     self.photos = ko.observableArray();
+
     self.locations = ko.observableArray();
 
-    var mystuff = ko.search.setData(self.locations());
+
+    self.filteredLocations = ko.computed(function() {
+        if (!self.searchTerm()) {
+            return self.locations();
+        } else {
+            return ko.utils.arrayFilter(self.locations(), function(location) {
+                return (location.name().toLowerCase().indexOf(self.searchTerm().toLowerCase()) >= 0);
+            });
+        }
+    });
+
+    self.filteredLocations.subscribe(function(newValue) {
+        self.createMarkers();
+    });
 
     self.errors = ko.observableArray();
 
@@ -31,19 +45,19 @@ function ViewModel() {
 
     var
         normalIcon,
+        markers = [],
         selectedMarker,
         selectedInfoWindow,
         map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 
-    // TODO: finish.
-    this.searchFor = function(formElement) {
-        var term = $(formElement).val();
-        var myobject = ko.search.setData(self.locations());
-        self.Search().filter({name: term});
-    }
-
     self.createMarkers = function() {
-        self.locations().forEach(function(location) {
+        markers.forEach(function(marker) {
+            marker.setMap(null);
+        });
+        markers.length = 0;
+
+
+        ko.utils.arrayForEach(self.filteredLocations(), function(location) {
             var marker = new google.maps.Marker({
                 position: new google.maps.LatLng(location.lat(), location.lng()),
                 map: map,
@@ -65,6 +79,7 @@ function ViewModel() {
                 maxWidth: 400
             });
 
+            // this handles the selected marker / info window states.
             google.maps.event.addListener(marker, 'click', function() {
                 if (selectedInfoWindow) {
                     selectedInfoWindow.close();
@@ -81,6 +96,8 @@ function ViewModel() {
                 marker.setIcon('img/pin66.png');
                 selectedMarker = marker;
             });
+
+            markers.push(marker);
         });
     };
 }
