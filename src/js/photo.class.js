@@ -5,6 +5,8 @@
  * fileext is a string like 'jpg' or 'png'.
  */
 function Photo(farm, server, id, secret, size, fileext, realname, username, description) {
+    'use strict';
+
     this.farm = ko.observable(farm);
     this.server = ko.observable(server);
     this.id = ko.observable(id);

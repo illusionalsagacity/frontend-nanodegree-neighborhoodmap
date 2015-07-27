@@ -1,6 +1,8 @@
 /* viewmodel.js */
 
 function ViewModel() {
+    'use strict';
+
     var self = this;
 
     self.appName = 'Neighborhood Map';
@@ -35,7 +37,9 @@ function ViewModel() {
 
     // TODO: finish.
     this.searchFor = function(formElement) {
-
+        var term = $(formElement).val();
+        var myobject = ko.search.setData(self.locations());
+        self.Search().filter({name: term});
     }
 
     self.createMarkers = function() {

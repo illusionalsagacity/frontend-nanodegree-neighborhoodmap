@@ -1,5 +1,7 @@
 /* location.class.js */
 function Location(name, address, desc, lat, lng, rating, ratingColor, categories, iconUrl) {
+	'use strict';
+
     this.address = ko.observable(address);
     this.name = ko.observable(name);
     this.description = ko.observable(desc);
