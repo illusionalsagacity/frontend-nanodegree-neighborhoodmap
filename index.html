@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Neighborhood Map</title>
+
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDbTwwP1IjRKbE-qpOrydqZnwuWF_BplQY"></script>
+
+        <link rel="stylesheet" href="vendor/css/bootstrap.min.css">
+        <link rel="stylesheet" href="vendor/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="css/offline-theme-chrome.min.css">
+        <link rel="stylesheet" href="css/offline-theme-english.min.css">
+        <link rel="stylesheet" href="css/style.min.css">
+
+
+        <!-- template: error -->
+        <script type="text/html" id="error-template">
+            <div class="alert alert-dismissable alert-danger fade in" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 data-bind="text: title"></h4>
+                <p data-bind="text: description"></p>
+            </div>
+        </script>
+
+
+        <!-- template: carousel-indicator -->
+        <script type="text/html" id="carousel-indicator-template">
+            <!-- ko if: $index() === 0 -->
+            <li class="active" data-target="#flickr-content" data-bind="attr: { 'data-slide-to': $index }"></li>
+            <!-- /ko --><!-- ko if: $index() !== 0 -->
+            <li data-target="#flickr-content" data-bind="attr: { 'data-slide-to': $index }"></li>
+            <!-- /ko -->
+        </script>
+
+        <!-- template: carousel-item -->
+        <script type="text/html" id="carousel-item-template">
+            <!-- ko if: $index() === 0 -->
+            <div class="item active">
+                <img data-bind="attr: { src: url }">
+                <div class="carousel-caption">
+                    <p data-bind="text: description"></p>
+                </div>
+            </div>
+            <!-- /ko -->
+            <!-- ko if: $index() !== 0 -->
+            <div class="item">
+                <img data-bind="attr: { src: url }">
+                <div class="carousel-caption">
+                    <p data-bind="text: description"></p>
+                </div>
+            </div>
+            <!-- /ko -->
+        </script>
+
+        <!-- a knockout template for the list -->
+        <script type="text/html" id="location-list-template">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <span data-bind="text: name"></span>
+                        <span class="label label-primary" data-bind="text: rating, style: { backgroundColor: '#' + ratingColor() } "></span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <p data-bind="text: description"></p>
+                </div>
+                <div class="panel-footer" data-bind="text: address"></div>
+            </div>
+        </script>
+
+    </head>
+
+    <body>
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" data-bind="text: appName"></a>
+                </div>
+                <div id="navbar" class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li class="active" role="presentation"><a href="#map" aria-controls="map" role="tab" data-toggle="tab">Map</a></li>
+                        <li role="presentation"><a href="#flickr" aria-controls="flickr" role="tab" data-toggle="tab">Flickr</a></li>
+                    </ul>
+                    <form class="navbar-form navbar-left">
+                        <div class="form-group">
+                            <input type="text" id="search" class="form-control" data-bind="value: searchTerm, valueUpdate: &apos;keyup&apos;" autocomplete="off" placeholder="Filter locations">
+                        </div>
+                    </form>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li role="presentation"><a href="#" data-toggle="modal" data-target="#aboutModal">About</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="modal fade" id="aboutModal" tabindex="-1" role="dialog" aria-labelledby="aboutModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&#xD7;</span></button>
+                        <h4 class="modal-title" id="aboutModelLabel">About the Neighborhood Map Project</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>This neighborhood map project was created as a part of the Udacity Front End Nanodegree program.</p>
+                        <p>Created with the Bootstrap framework, jQuery, Knockout, and Offline.js javascript libraries.</p>
+                        <p>Images are retrieved using the Flickr API, and locations are retrieved using the Foursquare API. Icons are also from Foursquare.</p>
+                        <p>Black pin icon courtesy of <a href="http://www.flaticon.com/authors/bogdan-rosu" title="Bogdan Rosu">Bogdan Rosu</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <h1 class="page-header">Fisherman&apos;s Wharf <small>San Francisco</small></h1>
+
+                <div data-bind="template: { name: &apos;error-template&apos;, foreach: errors }"></div>
+
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="map">
+                        <div class="col-md-8">
+                            <div id="map-canvas" class="embed-responsive embed-responsive-4by3"></div>
+                        </div>
+                        <div class="col-md-4" id="list" data-bind="template: { name: &apos;location-list-template&apos;, foreach: filteredLocations }"></div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="flickr">
+
+                        <!-- ko if: photos().length != 0 -->
+                        <div id="flickr-content" class="carousel" data-ride="carousel">
+                            <ol class="carousel-indicators" data-bind="template: { name: &apos;carousel-indicator-template&apos;, foreach: photos }"></ol>
+                            <div class="carousel-inner" role="listbox" data-bind="template: { name: &apos;carousel-item-template&apos;, foreach: photos }"></div>
+                            <a class="left carousel-control" href="#flickr-content" role="button" data-slide="prev">
+                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="right carousel-control" href="#flickr-content" role="button" data-slide="next">
+                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- libraries -->
+        <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="vendor/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.3.0/knockout-min.js"></script>
+        <script src="js/offline.min.js"></script>
+
+        <!-- app -->
+        <script src="js/location.class.min.js"></script>
+        <script src="js/photo.class.min.js"></script>
+        <script src="js/error.class.min.js"></script>
+        <script src="js/viewmodel.min.js"></script>
+        <script src="js/app.min.js"></script>
+    </body>
+</html>
