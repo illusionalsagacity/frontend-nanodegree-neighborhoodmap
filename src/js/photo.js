@@ -4,7 +4,7 @@
  * A knockout-compatible class for flickr images.
  * fileext is a string like 'jpg' or 'png'.
  */
-function Photo(farm, server, id, secret, size, fileext, realname, username, description) {
+var Photo = function(farm, server, id, secret, size, fileext, realname, username, description) {
     'use strict';
 
     this.farm = ko.observable(farm);
@@ -21,4 +21,6 @@ function Photo(farm, server, id, secret, size, fileext, realname, username, desc
         function() {
             return 'https://farm' + this.farm() + '.staticflickr.com/' + this.server() + '/' + this.id() + '_' + this.secret() + '_' + this.size() + '.' + this.fileext();
     }, this);
-}
+};
+
+module.exports = Photo;

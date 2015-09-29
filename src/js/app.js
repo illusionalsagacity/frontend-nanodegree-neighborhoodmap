@@ -1,4 +1,9 @@
-/* file: main.js */
+/* file: app.js */
+
+var ViewModel = require('./viewmodel.js');
+var Photo = require('./photo.js');
+var Location = require('./location.js');
+var Error = require('./error.js');
 
 jQuery(function($) {
     'use strict';

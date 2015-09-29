@@ -1,6 +1,6 @@
 /* viewmodel.js */
 
-function ViewModel() {
+var ViewModel = function() {
     'use strict';
 
     var self = this;
@@ -100,4 +100,6 @@ function ViewModel() {
             markers.push(marker);
         });
     };
-}
+};
+
+module.exports = ViewModel;

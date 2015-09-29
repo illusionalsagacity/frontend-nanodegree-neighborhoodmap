@@ -3,6 +3,8 @@
 var
     gulp = require('gulp'),
     util = require('gulp-util'),
+    source = require('vinyl-source-buffer'),
+    browserify = require('browserify'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
     minify = require('gulp-minify-css'),
@@ -55,7 +57,11 @@ gulp.task('deploy:css', function() {
 });
 
 gulp.task('deploy:js', function() {
-    return gulp.src('src/js/*.js')
+    var bundler = browserify({
+        entries: './src/js/app.js',
+    });
+    return bundler.bundle()
+        .pipe(source('app.js'))
         .pipe(uglify())
         .pipe(rename(renameOpts))
         .pipe(gulp.dest('dist/js'));
