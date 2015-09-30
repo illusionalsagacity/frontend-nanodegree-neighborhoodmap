@@ -4,6 +4,7 @@ var
     gulp = require('gulp'),
     util = require('gulp-util'),
     source = require('vinyl-source-buffer'),
+    concat = require('gulp-concat'),
     browserify = require('browserify'),
     rename = require('gulp-rename'),
     uglify = require('gulp-uglify'),
@@ -52,6 +53,7 @@ gulp.task('vendor:knockout', function() {
 gulp.task('deploy:css', function() {
     return gulp.src('src/css/*.css')
         .pipe(minify())
+        .pipe(concat('all.css'))
         .pipe(rename(renameOpts))
         .pipe(gulp.dest('dist/css'));
 });

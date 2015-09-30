@@ -4,6 +4,7 @@ var ViewModel = require('./viewmodel.js');
 var Photo = require('./photo.js');
 var Location = require('./location.js');
 var Error = require('./error.js');
+var Offline = require('./offline.js');
 
 jQuery(function($) {
     'use strict';
