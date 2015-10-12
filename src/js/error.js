@@ -1,4 +1,4 @@
-/* error.class.js */
+/* error.js */
 /* Error
  * A class for a knockout-compatible error message to be displayed.
  */

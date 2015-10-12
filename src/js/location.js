@@ -1,4 +1,4 @@
-/* location.class.js */
+/* location.js */
 var Location = function(name, address, desc, lat, lng, rating, ratingColor, categories, iconUrl) {
 	'use strict';
 

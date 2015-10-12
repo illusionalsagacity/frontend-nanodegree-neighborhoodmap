@@ -1,4 +1,4 @@
-/* photo.class.js */
+/* photo.js */
 
 /* Photo
  * A knockout-compatible class for flickr images.
