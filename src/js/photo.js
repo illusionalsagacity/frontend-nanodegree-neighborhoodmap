@@ -23,4 +23,12 @@ var Photo = function(farm, server, id, secret, size, fileext, realname, username
     }, this);
 };
 
+/* Updates the photo's information from flickr api json response data.
+ */
+Photo.prototype.setInfo = function(data) {
+    this.realname(data.photo.owner.realname)
+        .username(data.photo.owner.username)
+        .description(data.photo.description._content);
+}
+
 module.exports = Photo;
