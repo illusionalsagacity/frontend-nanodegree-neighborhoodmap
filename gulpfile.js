@@ -61,7 +61,7 @@ gulp.task('deploy:css', function() {
 gulp.task('deploy:js', function() {
     var bundler = browserify({
         entries: './src/js/app.js',
-    });
+    }).transform("babelify", { presets: [ "es2015" ] });
     return bundler.bundle()
         .pipe(source('app.js'))
         .pipe(uglify())

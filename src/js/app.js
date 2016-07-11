@@ -19,39 +19,39 @@ var
 var flickrAPI = new FlickrAPI(flickrAPIKey, flickrAPIUrl);
 var foursquareAPI = new FoursquareAPI(foursquareClientID, foursquareClientSecret);
 
-function createLocations(response) {
-    $.each(response.response.groups[0].items, function(i, location) {
-        var address = location.venue.location.address + ', ' +
-            location.venue.location.city + ', ' +
-            location.venue.location.state + ' ' +
-            location.venue.location.postalCode + ', ' +
-            location.venue.location.country;
+function createLocation(location) {
+    var address = [
+        location.venue.location.address,
+        location.venue.location.city,
+        location.venue.location.state,
+        location.venue.location.postalCode,
+        location.venue.location.country
+    ].join(", ");
 
-        var categories = [];
-        location.venue.categories.forEach(function(category) {
-            categories.push(category.name);
-        });
+    var categories = location.venue.categories.map(function (category) { return category.name });
 
-        var iconUrl;
-        if (typeof location.venue.categories !== "undefined") {
-            iconUrl = location.venue.categories[0].icon.prefix + 'bg_32' + location.venue.categories[0].icon.suffix;
-        } else {
-            iconUrl = '';
-        }
+    var iconUrl = "";
+    if (typeof location.venue.categories !== "undefined") {
+        iconUrl = location.venue.categories[0].icon.prefix + "bg_32" + location.venue.categories[0].icon.suffix;
+    }
 
-        var tmp = new Location(
-            location.venue.name,
-            address,
-            location.tips[0].text,
-            location.venue.location.lat,
-            location.venue.location.lng,
-            location.venue.rating,
-            location.venue.ratingColor,
-            categories,
-            iconUrl
-        );
-        viewModel.locations.push(tmp);
-    });
+    return new Location(
+        location.venue.name,
+        address,
+        location.tips[0].text,
+        location.venue.location.lat,
+        location.venue.location.lng,
+        location.venue.rating,
+        location.venue.ratingColor,
+        categories,
+        iconUrl
+    );
+}
+
+function createLocations(items) {
+    viewModel.locations(items.map(function (location) {
+        return createLocation(location);
+    }));
 }
 
 var viewModel = new ViewModel();
@@ -89,7 +89,7 @@ $(document).ready(function() {
 
     foursquareAPI.explore('37.8083,-122.4156', '20150717')
     .done(function(data, textStatus, jqXHR) {
-        createLocations(data);
+        createLocations(data.response.groups[0].items);
         viewModel.createMarkers();
     })
     .fail(function(jqXHR, textStatus, errorThrown) {
